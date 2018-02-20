@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/mvc
+                        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+                        http://www.springframework.org/schema/context
+                        http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- 启用基于注解的配置 -->
+    <!--<context:annotation-config />-->
+    <!-- 定义controller扫描包 扫描配置的base-package包下的所有使用了@Component注解的类，并且将它们自动注册到容器中，同时也扫描@Controller，@Service，@Respository这三个注解，因为他们是继承自@Component-->
+    <context:component-scan base-package="com.wlt">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"></context:exclude-filter>
+    </context:component-scan>
+
+    <!--<bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" lazy-init="true">-->
+        <!--&lt;!&ndash;<property name="dataSource" ref="dataSource"/>&ndash;&gt;-->
+        <!--<property name="schedulerName" value="mainScheduler"/>-->
+        <!--&lt;!&ndash;<property name="jobSchedulingDataLocations" value="classpath:quartz/quartz-data.xml"/>&ndash;&gt;-->
+        <!--<property name="quartzProperties">-->
+            <!--<props>-->
+                <!--<prop key="org.quartz.scheduler.instanceId">AUTO</prop>-->
+                <!--<prop key="org.quartz.scheduler.skipUpdateCheck">true</prop>-->
+                <!--<prop key="org.quartz.threadPool.class">org.quartz.simpl.SimpleThreadPool</prop>-->
+                <!--<prop key="org.quartz.threadPool.threadCount">30</prop>-->
+                <!--<prop key="org.quartz.threadPool.threadPriority">5</prop>-->
+                <!--<prop key="org.quartz.jobStore.class">org.quartz.impl.jdbcjobstore.JobStoreTX</prop>-->
+                <!--<prop key="org.quartz.jobStore.driverDelegateClass">org.quartz.impl.jdbcjobstore.StdJDBCDelegate</prop>-->
+                <!--<prop key="org.quartz.jobStore.useProperties">false</prop>-->
+                <!--<prop key="org.quartz.jobStore.tablePrefix">QRTZ_</prop>-->
+                <!--<prop key="org.quartz.jobStore.isClustered">true</prop>-->
+                <!--<prop key="org.quartz.jobStore.misfireThreshold">60000</prop>-->
+            <!--</props>-->
+        <!--</property>-->
+    <!--</bean>-->
+</beans>

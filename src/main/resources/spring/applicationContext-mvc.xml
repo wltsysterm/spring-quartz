@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/mvc
+                        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+                        http://www.springframework.org/schema/context
+                        http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- 启用基于注解的配置:@autowiere @resource @postconduct @predestroy等注解使用前，必须声明相关的spring bean，这个配置就是隐式去声明这些bean-->
+    <!--<context:component-scan/>配置已经自动做了上面的隐式声明，所以有做扫描的配置，下面的这段配置即可省略-->
+    <context:annotation-config />
+    <!-- 定义controller扫描包 扫描配置的base-package包下的所有使用了@Component注解的类，并且将它们自动注册到容器中，同时也扫描@Controller，@Service，@Respository这三个注解，因为他们是继承自@Component-->
+    <!--use-defalut-filters默认打开，表示扫描全部的注解，包括有controller,service,reponsitory等注解，关上之后，通过过滤器里面定义扫描的范围做到只扫描controller的功能-->
+    <context:component-scan base-package="com.wlt" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"></context:include-filter>
+        <context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.RestControllerAdvice"></context:include-filter>
+        <context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"></context:include-filter>
+    </context:component-scan>
+    <!--和SpringMVC相关如下配置，经过验证，这个是SpringMVC必须要配置的，因为它声明了@RequestMapping、@RequestBody、@ResponseBody等的spring-bean。并且，该配置默认加载很多的参数绑定方法，比如json转换解析器等-->
+    <mvc:annotation-driven>
+        <!-- 消息转换使用json格式 -->
+        <mvc:message-converters>
+            <bean
+                    class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>text/html;charset=UTF-8</value>
+                        <value>application/json;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+    <!-- 处理静态资源  下面这串跟webflow的页面跳转冲突了。-->
+<!--    <mvc:default-servlet-handler/>-->
+    <!-- 配置视图解析器 -->
+    <!--视图解析器默认有一套，如果要重写，那么如下方式，其他方式还有很多，可以参考网络上的。默认所有的requestmapping都会被视图解析器拦截，如果不想被拦截只返回数据，请添加@responseBody-->
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+</beans>

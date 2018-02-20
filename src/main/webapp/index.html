@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./lib/bootstrapsubmenu/css/bootstrap-submenu.css">
+    <link rel="stylesheet" href="./lib/bootstraptable/css/bootstrap-table.min.css">
+    <link rel="stylesheet" href="./lib/bootstraptreeview/css/bootstrap-treeview.css">
+    <link rel="stylesheet" href="./lib/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./lib/adminlte/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./lib/adminlte/css/ionicons.min.css">
+    <link rel="stylesheet" href="./lib/adminlte/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="./lib/adminlte/css/_all-skins.min.css">
+    <link rel="stylesheet" href="./lib/adminlte/css/animate.min.css">
+    <link rel="stylesheet" href="./lib/future.css">
+</head>
+<body>
+<button type="button" onclick="test();">测试springmvc启动情况</button>
+<button type="button" onclick="error();">测试springmvc全局异常捕捉</button>
+<div>最简单springmvc模版请检出c7443，完整springmvc模版请检出c2848</div>
+</body>
+<script src="./lib/jQuery/jquery-2.2.3.min.js"></script>
+<script src="./lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="./lib/validate/jquery.validate.min.js"></script>
+<script src="./lib/locale/zh.js"></script>
+<script src="./lib/future.js"></script>
+<script src="./lib/bootstrapsubmenu/js/bootstrap-submenu.js"></script>
+<script src="./lib/bootstraptreeview/js/bootstrap-treeview.js"></script>
+<script src="./lib/bootstraptable/js/bootstrap-table.min.js"></script>
+<script>
+    function test(){
+        bs.ajax({
+            url:"/api/index/test",
+            success:function (result) {
+                $("div").html(result);
+            }
+        });
+    }
+    function error(){
+        bs.ajax({
+            url:"/api/index/error",
+            success:function (result) {
+                $("div").html(result.code+result.msg);
+            }
+        });
+    }
+</script>
+</html>
