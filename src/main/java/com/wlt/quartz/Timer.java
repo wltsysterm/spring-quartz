@@ -22,13 +22,12 @@ import static org.quartz.TriggerBuilder.newTrigger;
  */
 @Service
 public class Timer {
-//    @Resource(name = "scheduler")
-//    private Scheduler scheduler;
-//    @PostConstruct
-    @Test
+    @Resource(name = "scheduler")
+    private Scheduler scheduler;
+    @PostConstruct
     public void initJob() throws SchedulerException, IOException, InterruptedException {
         // Grab the Scheduler instance from the Factory
-        QuartzScheduleUtil quartzScheduleUtil = new QuartzScheduleUtil(QuartzScheduleUtil.newScheduler());
+        QuartzScheduleUtil quartzScheduleUtil = new QuartzScheduleUtil(scheduler);
         quartzScheduleUtil.start();
 
         String jobName = "wltTimer";
