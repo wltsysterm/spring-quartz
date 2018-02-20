@@ -17,7 +17,7 @@
     <context:component-scan base-package="com.wlt">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"></context:exclude-filter>
     </context:component-scan>
-
+    <import resource="sping-quartz.xml"/>
     <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" lazy-init="true">
         <!--<property name="dataSource" ref="dataSource"/>-->
         <property name="schedulerName" value="mainScheduler"/>

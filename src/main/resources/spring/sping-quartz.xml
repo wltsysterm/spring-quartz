@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+    <!-- <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/> -->
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="requirescan" /><!-- 扫描需求列表 -->
+            </list>
+        </property>
+    </bean>
+    <!-- -->
+    <bean id="requirescan" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail">
+            <ref bean="requirescanJob" />
+        </property>
+        <!-- cron表达式 -->
+        <property name="cronExpression">
+            <!-- Cron 表达式包括以下 7 个字段：秒 分 小时 月内日期 月 周内日期 年（可选字段） -->
+            <value>*/3 * * * * ?</value><!-- 每天晚上10点执行一次 0 15 15 * * ?-->
+        </property>
+    </bean>
+    <!-- -->
+    <!-- -->
+    <bean id="requirescanJob"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <!-- 调用的类 -->
+        <property name="targetObject">
+            <ref bean="requireJob" />
+        </property>
+        <!-- 调用类中的方法 -->
+        <property name="targetMethod">
+            <value>scanRequire</value>
+        </property>
+        <property name="concurrent" value="false" />
+        <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->
+    </bean>
+    <!-- -->
+    <bean id="requireJob" class="com.wlt.quartz.Quartz"
+          scope="prototype"></bean>
+</beans>
+
