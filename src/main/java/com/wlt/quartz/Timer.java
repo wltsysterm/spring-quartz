@@ -1,6 +1,8 @@
 package com.wlt.quartz;
 
 import com.wlt.quartz.job.HelloJob;
+import com.wlt.quartz.util.QuartzScheduleJob;
+import com.wlt.quartz.util.QuartzScheduleUtil;
 import org.junit.Test;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
@@ -22,17 +24,21 @@ import static org.quartz.TriggerBuilder.newTrigger;
 public class Timer {
 //    @Resource(name = "scheduler")
 //    private Scheduler scheduler;
-    @PostConstruct
-    public void initJob() throws SchedulerException, IOException {
+//    @PostConstruct
+    @Test
+    public void initJob() throws SchedulerException, IOException, InterruptedException {
         // Grab the Scheduler instance from the Factory
-        Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
+        QuartzScheduleUtil quartzScheduleUtil = new QuartzScheduleUtil(QuartzScheduleUtil.newScheduler());
+        quartzScheduleUtil.start();
 
-        // and start it off
-        scheduler.start();
         String jobName = "wltTimer";
         String jobGroup = "job-group";
         String triggerGroup = "trigger-group";
         String triggerRule = "*/5 * * * * ?";
+        QuartzScheduleJob quartzScheduleJob = new QuartzScheduleJob();
+        quartzScheduleJob.setJobGroup(jobGroup);
+        quartzScheduleJob.setJobName(jobName);
+        quartzScheduleJob.setTriggerGroup(triggerGroup);
         JobDetail job = newJob(HelloJob.class)
                 .withIdentity(jobName, jobGroup)
                 .build();
@@ -42,8 +48,13 @@ public class Timer {
                 .withSchedule(cronSchedule(triggerRule))
                 .build();
         try {
-            scheduler.scheduleJob(job, trigger);
+            quartzScheduleUtil.getScheduler().scheduleJob(job, trigger);
             System.out.println("初始化定时任务success");
+            System.out.println(quartzScheduleUtil.isStarted());
+
+            quartzScheduleUtil.pauseTrigger(quartzScheduleJob);
+            Thread.sleep(6000);
+            quartzScheduleUtil.resumeTrigger(quartzScheduleJob);
         } catch (SchedulerException e) {
             System.out.println("初始化定时任务失败");
         }
